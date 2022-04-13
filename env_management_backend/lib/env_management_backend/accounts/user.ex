@@ -14,6 +14,8 @@ defmodule EnvManagementBackend.Accounts.User do
   def changeset(user, attrs) do
     user
     |> cast(attrs, [:name, :email, :role])
-    |> validate_required([:name, :email, :role])
+    |> validate_required([:name])
+    |> update_change(:email, &String.downcase(&1))
+    |> validate_length(:name, min: 6, max: 30)
   end
 end
