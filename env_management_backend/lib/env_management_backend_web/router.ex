@@ -5,8 +5,13 @@ defmodule EnvManagementBackendWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api", EnvManagementBackendWeb do
+  scope "/api" do
     pipe_through :api
+    forward("/graphql", Absinthe.Plug, schema: EvnManagementApi.Schema)
+
+    if Mix.env() == :dev do
+      forward("/graphiql", Absinthe.Plug.GraphiQL, schema: EvnManagementApi.Schema)
+    end
   end
 
   # Enables LiveDashboard only for development
